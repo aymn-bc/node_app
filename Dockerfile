@@ -4,7 +4,8 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --no-audit --no-fund
+# Use npm install to allow package.json overrides to take effect without local package-lock updates
+RUN npm install --no-audit --no-fund
 
 COPY src ./src
 
@@ -16,10 +17,12 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Upgrade Alpine OS packages to patch libcrypto3 / libssl3 (OpenSSL)
+RUN apk update && apk upgrade --no-cache && \
+    addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY package*.json ./
-RUN npm ci --omit=dev --no-audit --no-fund
+RUN npm install --omit=dev --no-audit --no-fund
 
 COPY --chown=appuser:appgroup --from=builder /app/src ./src
 
