@@ -15,11 +15,11 @@
     "tar": "^7.5.22"
   },
   "overrides": {
-    "brace-expansion": "^2.0.1",
+    "brace-expansion": "^2.1.4",
     "cross-spawn": "^7.0.5",
     "glob": "^11.1.0",
     "ip-address": "^10.3.1",
-    "minimatch": "^10.2.1",
+    "minimatch": "^10.2.3",
     "sigstore": "^4.1.1",
     "tar": "$tar"
   }
