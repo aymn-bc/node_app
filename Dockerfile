@@ -10,7 +10,7 @@ COPY src ./src
 
 
 # STAGE 2: Production Execution
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
@@ -18,8 +18,10 @@ ENV NODE_ENV=production
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-COPY package*.json ./
-RUN npm ci --omit=dev --no-audit --no-fund
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+RUN rm -rf /usr/local/lib/node_modules/npm \
+ && rm -f /usr/local/bin/npm /usr/local/bin/npx
 
 COPY --chown=appuser:appgroup --from=builder /app/src ./src
 
