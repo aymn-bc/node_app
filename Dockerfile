@@ -23,6 +23,7 @@ RUN apk update && apk upgrade --no-cache && \
 
 COPY package*.json ./
 RUN npm install --omit=dev --no-audit --no-fund
+RUN rm -rf /usr/local/lib/node_modules/npm && rm -f /usr/local/bin/npm /usr/local/bin/npx
 
 COPY --chown=appuser:appgroup --from=builder /app/src ./src
 
